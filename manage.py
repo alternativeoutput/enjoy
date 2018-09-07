@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+
+#
+# admin: enjoy:enjoypasswd
+#
 import os
 import sys
 
