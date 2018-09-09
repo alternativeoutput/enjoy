@@ -1,6 +1,7 @@
 # chat/consumers.py
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
+from channels.auth import get_user
 import json
 
 
@@ -29,6 +30,9 @@ class ChatConsumer(WebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
 
+        # if not logged in special "AnonymousUser" is returned
+        self.user = self.scope["user"]
+        print(self.user)
         # Send message to room group
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
@@ -40,6 +44,7 @@ class ChatConsumer(WebsocketConsumer):
 
     # Receive message from room group
     def chat_message(self, event):
+        print(async_to_sync(get_user)(self.scope))
         message = event['message']
 
         # Send message to WebSocket

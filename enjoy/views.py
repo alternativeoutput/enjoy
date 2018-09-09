@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
 
+
 def index(request):
     return render(request, 'enjoy/index.html', {})
 
