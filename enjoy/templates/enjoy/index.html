@@ -9,8 +9,13 @@
     <script src="{% static 'enjoy/js/js.cookie.js' %}"></script>
 </head>
 <body>
+    <div>Date: {{ date_cur }}</div>
     <div name="authbox"></div>
 
+    <form name="form-check-ajax" method="post">
+      <button name="check-ajax" type="button">Check Ajax</button>
+    </form>
+    <div name="check-ajax-res"></div>
     What chat room would you like to enter?<br/>
     <input id="room-name-input" type="text" size="100"/><br/>
     <input id="room-name-submit" type="button" value="Enter"/>
