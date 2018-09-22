@@ -1,19 +1,41 @@
 BASE_ENV=$(HOME)/.virtualenvs
-NAME_ENV=djchan
+NAME_ENV_DEV=djchan
+NAME_ENV_PROD=enjoy
 
-create:
-	@echo "CREATE"
-	@test ! -d "$(BASE_ENV)/$(NAME_ENV)" \
-|| ( echo "Virtualenv '$(BASE_ENV)/$(NAME_ENV)' already exists" ; false )
-	python3 -m virtualenv -p /usr/bin/python3.5 '$(BASE_ENV)/$(NAME_ENV)'
-	. '$(BASE_ENV)/$(NAME_ENV)/bin/activate' && pip install --upgrade pip
+checkvenv:
+	@test -z "$(VIRTUAL_ENV)" || ( echo ; \
+	    echo "Virtualenv '$(shell basename "$(VIRTUAL_ENV)")' is activated, deactivate before proceeding" \
+	    ; echo ; false )
 
+create_dev: checkenv
+	@echo "CREATE DEV"
+	@test ! -d "$(BASE_ENV)/$(NAME_ENV_DEV)" \
+|| ( echo "Virtualenv '$(BASE_ENV)/$(NAME_ENV_DEV)' already exists" ; false )
+	python3 -m virtualenv -p /usr/bin/python3.5 '$(BASE_ENV)/$(NAME_ENV_DEV)'
+	. '$(BASE_ENV)/$(NAME_ENV_DEV)/bin/activate' \
+	    && pip install --upgrade pip \
+	    && pip install -r requirements_dev.txt
 
-destroy:
-	@echo "DESTROY"
+create_prod: checkvenv
+	@echo "CREATE PROD"
+	@test ! -d "$(BASE_ENV)/$(NAME_ENV_PROD)" \
+|| ( echo "Virtualenv '$(BASE_ENV)/$(NAME_ENV_PROD)' already exists" ; false )
+	python3 -m virtualenv -p /usr/bin/python3.5 '$(BASE_ENV)/$(NAME_ENV_PROD)'
+	. '$(BASE_ENV)/$(NAME_ENV_PROD)/bin/activate' \
+	    && pip install --upgrade pip \
+	    && pip install -r requirements_prod.txt
+
+destroy_dev:
+	@echo "DESTROY DEV"
 	deactivate || true
-	test ! -d "$(BASE_ENV)/$(NAME_ENV)" || rm -rf "$(BASE_ENV)/$(NAME_ENV)"
+	test ! -d "$(BASE_ENV)/$(NAME_ENV_DEV)" || rm -rf "$(BASE_ENV)/$(NAME_ENV_DEV)"
 
-recreate: destroy create
+destroy_prod:
+	@echo "DESTROY PROD"
+	deactivate || true
+	test ! -d "$(BASE_ENV)/$(NAME_ENV_PROD)" || rm -rf "$(BASE_ENV)/$(NAME_ENV_PROD)"
 
-.PHONY: create destroy recreate
+recreate_dev: destroy_dev create_dev
+recreate_prod: destroy_prod create_prod
+
+.PHONY: checkvenv create_dev create_prod destroy_dev destroy_prod recreate_dev recreate_prod
