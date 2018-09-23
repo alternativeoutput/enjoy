@@ -1,0 +1,4 @@
+include LICENSE
+include README.md
+recursive-include enjoy/static *
+recursive-include enjoy/templates *
