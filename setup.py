@@ -6,12 +6,12 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name="enjoy",
     version="0.0.1",
-    author="Example Author",
-    author_email="author@example.com",
-    description="A small example package",
+    author="Matteo Nastasi",
+    author_email="nastasi@alternativeoutput.it",
+    description="Backend for full interactive web-app",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/pypa/sampleproject",
+    url="https://github.com/alternativeoutput/enjoy",
     packages=setuptools.find_packages(),
     include_package_data=True,
     classifiers=[
